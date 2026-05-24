@@ -17,6 +17,8 @@ import {
  * design-system: design.md · designed-as-app
  */
 
+type TokenKind = "btc" | "musd";
+
 export default function Landing() {
   return (
     <>
@@ -36,10 +38,15 @@ export default function Landing() {
         <section className="below">
           <MotionLede>
             <p>
-              No selling, no wrapping, no bank. Deposit BTC, borrow MUSD, and
-              repay when ready to release your Bitcoin back.
+              Deposit BTC, borrow MUSD, and repay when ready to release your
+              Bitcoin back.
             </p>
           </MotionLede>
+
+          <div className="landing-snapshot" aria-label="Example position">
+            <SnapshotItem token="btc" label="Collateral" value="0.001 BTC" />
+            <SnapshotItem token="musd" label="Debt" value="2,009.01 MUSD" />
+          </div>
 
           <HowItWorks />
 
@@ -64,7 +71,41 @@ export default function Landing() {
   );
 }
 
-function Fact({ term, value, note }: { term: string; value: string; note: string }) {
+function SnapshotItem({
+  token,
+  label,
+  value,
+}: {
+  token: TokenKind;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="snapshot-item">
+      <TokenMark kind={token} />
+      <span className="snapshot-label">{label}</span>
+      <span className="snapshot-value">{value}</span>
+    </div>
+  );
+}
+
+function TokenMark({ kind }: { kind: TokenKind }) {
+  return (
+    <span className={`token-mark token-mark-${kind}`} aria-hidden="true">
+      {kind === "btc" ? "₿" : "M"}
+    </span>
+  );
+}
+
+function Fact({
+  term,
+  value,
+  note,
+}: {
+  term: string;
+  value: string;
+  note: string;
+}) {
   return (
     <MotionFact>
       <dt>{term}</dt>
