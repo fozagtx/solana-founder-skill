@@ -8,24 +8,16 @@ const STORAGE_KEY = "mezocircles:getting-started-seen";
 
 const steps = [
   {
-    title: "Connect owner wallet",
-    detail: "Use the wallet that owns this vault so actions are allowed.",
+    title: "Connect",
+    detail: "Use the vault owner wallet.",
   },
   {
-    title: "Check limits",
-    detail: "Minimum debt is 1,800 MUSD and the position must stay above 110% ICR.",
+    title: "Open",
+    detail: "Deposit BTC, borrow at least 1,800 MUSD.",
   },
   {
-    title: "Open position",
-    detail: "Deposit BTC collateral, choose MUSD debt, then confirm the vault transaction.",
-  },
-  {
-    title: "Monitor risk",
-    detail: "Watch ICR, liquidation price, and BTC drop buffer after the position is live.",
-  },
-  {
-    title: "Manage debt",
-    detail: "Add BTC, repay MUSD after approval, or close when the full debt is available.",
+    title: "Manage",
+    detail: "Watch ICR, add BTC, repay, or close.",
   },
 ] as const;
 
@@ -63,10 +55,9 @@ export function GettingStartedGuide() {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        title="Demo flow"
+        title="Demo"
       >
         <div className="guide-flow" aria-hidden="true">
-          <span />
           <span />
           <span />
           <span />
