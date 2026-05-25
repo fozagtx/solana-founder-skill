@@ -1073,6 +1073,85 @@ body {
 .action-btn-outline:hover { background: var(--color-ink); color: var(--color-paper); }
 .action-btn-outline:disabled { opacity: 0.4; cursor: not-allowed; }
 
+.payback-card {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.85fr) minmax(0, 1.15fr);
+  gap: var(--space-sm);
+  align-items: stretch;
+}
+.payback-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+.payback-copy p {
+  margin: var(--space-3xs) 0 0;
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  line-height: 1.25;
+}
+.payback-copy strong {
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+  font-weight: 600;
+}
+.payback-total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  color: var(--color-ink);
+}
+.payback-total span {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+.payback-total small {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.payback-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(5.5rem, 0.55fr) minmax(5.5rem, 0.55fr);
+  gap: var(--space-2xs);
+  align-items: end;
+}
+.payback-rows {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2xs);
+}
+.payback-rows .card-row {
+  border: var(--rule-hair) solid var(--color-rule);
+  background: var(--color-paper-2);
+  padding: var(--space-3xs) var(--space-2xs);
+}
+.payback-warning {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-xs);
+  line-height: 1.25;
+}
+
+@media (max-width: 48rem) {
+  .payback-card,
+  .payback-controls,
+  .payback-rows {
+    grid-template-columns: 1fr;
+  }
+}
+
 .tx-line {
   font-family: var(--font-mono);
   font-size: var(--text-sm);

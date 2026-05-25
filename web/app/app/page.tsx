@@ -3,6 +3,7 @@
 import { VaultStatus } from "@/components/VaultStatus";
 import { VaultActions } from "@/components/VaultActions";
 import { DashboardDemo } from "@/components/DashboardDemo";
+import { PaybackCalculator } from "@/components/PaybackCalculator";
 import {
   MotionAside,
   MotionSection,
@@ -29,6 +30,7 @@ export default function App() {
             </div>
           </div>
           <VaultActions />
+          <PaybackCalculator />
         </MotionSection>
       </MotionWorkbenchGrid>
     </MotionWorkbench>
