@@ -1,19 +1,18 @@
 ---
 name: pharos-nft-appraisal
 description: >
-  Use this skill to appraise an NFT collection by extracting an Ethereum or Base
-  contract address and chain from a user prompt, fetching collection metadata
-  from Alchemy, and returning a cautious JSON appraisal. Supports ETH and BASE
-  only. Requires Alchemy and optionally uses OpenAI for prompt extraction.
+  Use this skill to appraise an NFT contract on Pharos by extracting a contract
+  address from a user prompt, inspecting the contract through Pharos JSON-RPC,
+  checking common NFT interfaces, and returning a cautious JSON appraisal.
+  Supports Pharos networks only.
 version: 0.1.0
 requires:
-  env:
-    - ALCHEMY_API_KEY
+  env: []
 ---
 
 # Pharos NFT Appraisal
 
-Appraise an NFT project from a user prompt or explicit contract metadata. This skill supports only Ethereum mainnet and Base mainnet.
+Appraise an NFT contract from a user prompt or explicit contract address. This skill is Pharos-only.
 
 ## Run
 
@@ -24,7 +23,7 @@ python3 scripts/run_appraisal.py --metadata examples/nft-appraisal-input.json --
 Or through stdin:
 
 ```bash
-printf '%s\n' '{"prompt":"tell me about 0xed5af388653567af2f388e6224dc7c4b3241c544 on eth"}' \
+printf '%s\n' '{"prompt":"appraise this Pharos NFT contract: 0x0000000000000000000000000000000000000000"}' \
   | python3 scripts/run_appraisal.py --pretty
 ```
 
@@ -32,9 +31,10 @@ printf '%s\n' '{"prompt":"tell me about 0xed5af388653567af2f388e6224dc7c4b3241c5
 
 ```json
 {
-  "prompt": "tell me about 0xed5af388653567af2f388e6224dc7c4b3241c544, which is on eth",
-  "openai_api_key": "optional, prefer OPENAI_API_KEY",
-  "alchemy_api_key": "optional, prefer ALCHEMY_API_KEY"
+  "prompt": "appraise this Pharos NFT contract: 0x0000000000000000000000000000000000000000",
+  "network": "pharos-testnet",
+  "rpc_url": "optional custom Pharos RPC URL",
+  "openai_api_key": "optional, prefer OPENAI_API_KEY"
 }
 ```
 
@@ -42,20 +42,20 @@ You can also bypass extraction:
 
 ```json
 {
-  "contract_address": "0xed5af388653567af2f388e6224dc7c4b3241c544",
-  "chain": "eth"
+  "contract_address": "0x0000000000000000000000000000000000000000",
+  "network": "pharos-testnet"
 }
 ```
 
 ## Output
 
-Returns extracted target, Alchemy collection metadata, floor-price data when present, risk flags, limitations, and a non-financial appraisal summary.
+Returns extracted target, Pharos RPC network details, contract bytecode presence, ERC721/ERC1155 interface checks, standard metadata reads, risk flags, limitations, and a non-financial appraisal summary.
 
 ## Guardrails
 
-- Supports only `eth` and `base`.
+- Supports Pharos networks only.
 - No buy, sell, hold, price-target, profit, or investment advice.
 - No invented floor price, volume, rarity, ownership, or sales data.
-- If chain is missing, return `NEEDS_CHAIN`; do not guess.
-- API keys must not be logged or returned.
+- Do not claim market value unless a Pharos marketplace data source is explicitly added later.
+- API keys and RPC secrets must not be logged or returned.
 

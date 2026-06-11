@@ -4,43 +4,43 @@
 
 # Pharos NFT Appraisal
 
-A Pharos-compatible skill for appraising NFT collections on Ethereum and Base. It extracts an NFT contract address and chain from a user prompt, fetches collection metadata from Alchemy, and returns a cautious, source-grounded appraisal.
+A Pharos-compatible skill for appraising NFT contracts on Pharos. It extracts a contract address from a user prompt, inspects the contract through Pharos JSON-RPC, checks common NFT interfaces, reads standard collection metadata when available, and returns a cautious appraisal.
 
 This skill is built for the Skill-to-Agent Dual Cascade Hackathon as a reusable module that any agent can call.
 
 ## Features
 
-- Extracts NFT contract address from natural-language prompts
-- Supports Ethereum mainnet and Base mainnet
-- Uses OpenAI for structured extraction when available
-- Falls back to regex address extraction and chain keyword detection
-- Fetches NFT collection metadata from Alchemy
-- Returns floor price when Alchemy/OpenSea metadata provides it
+- Extracts an NFT contract address from natural-language prompts
+- Uses Pharos JSON-RPC, not off-network NFT APIs
+- Defaults to Pharos testnet
+- Supports Pharos testnet, Pharos Atlantic, and configurable Pharos RPC URLs
+- Checks ERC721 and ERC1155 interface support through `eth_call`
+- Reads `name`, `symbol`, `totalSupply`, and `contractURI` when the contract exposes them
 - Produces risk flags, limitations, citations, and a non-financial appraisal summary
 
 ## Requirements
 
 - Python 3.10+
-- `ALCHEMY_API_KEY`
+- Pharos RPC access
 
-Optional:
+Optional environment variables:
 
-- `OPENAI_API_KEY`
-- `OPENAI_EXTRACT_MODEL`
+- `PHAROS_RPC_URL` - override the default Pharos RPC endpoint
+- `OPENAI_API_KEY` - optional structured prompt extraction
+- `OPENAI_EXTRACT_MODEL` - optional extraction model override
 
 No third-party Python package is required; the skill uses Python standard-library HTTP utilities.
 
 ## Quick Start
 
 ```bash
-export ALCHEMY_API_KEY="your_alchemy_key"
 python3 scripts/run_appraisal.py --metadata examples/nft-appraisal-input.json --pretty
 ```
 
 Or pipe JSON through stdin:
 
 ```bash
-printf '%s\n' '{"prompt":"tell me about 0xed5af388653567af2f388e6224dc7c4b3241c544, which is on eth"}' \
+printf '%s\n' '{"prompt":"appraise this Pharos NFT contract: 0x0000000000000000000000000000000000000000"}' \
   | python3 scripts/run_appraisal.py --pretty
 ```
 
@@ -50,7 +50,7 @@ Natural-language prompt:
 
 ```json
 {
-  "prompt": "tell me about 0xed5af388653567af2f388e6224dc7c4b3241c544, which is on eth"
+  "prompt": "appraise this Pharos NFT contract: 0x0000000000000000000000000000000000000000"
 }
 ```
 
@@ -58,29 +58,19 @@ Explicit target:
 
 ```json
 {
-  "contract_address": "0xed5af388653567af2f388e6224dc7c4b3241c544",
-  "chain": "eth"
+  "contract_address": "0x0000000000000000000000000000000000000000",
+  "network": "pharos-testnet"
 }
 ```
 
-Optional API-key metadata is supported, though environment variables are preferred:
+Supported network values:
 
-```json
-{
-  "prompt": "Appraise this Base NFT collection: 0x0000000000000000000000000000000000000000",
-  "alchemy_api_key": "optional",
-  "openai_api_key": "optional"
-}
-```
+- `pharos`
+- `pharos-testnet`
+- `pharos-atlantic`
+- `pharos-mainnet`
 
-Supported chain values:
-
-- `eth`
-- `ethereum`
-- `mainnet`
-- `base`
-
-All values normalize to `eth` or `base`.
+If no network is supplied, the skill defaults to `pharos-testnet`.
 
 ## Output
 
@@ -88,9 +78,9 @@ The skill returns JSON containing:
 
 - extracted `target`
 - extraction method
-- Alchemy collection metadata
-- OpenSea metadata when available
-- floor price when available
+- Pharos RPC network details
+- detected NFT interfaces
+- collection metadata available from contract reads
 - cautious appraisal summary
 - confidence level
 - risk flags
@@ -103,19 +93,18 @@ Example shape:
 {
   "status": "success",
   "skill": "nft_appraisal_skill",
-  "source": "alchemy",
+  "source": "pharos-json-rpc",
   "target": {
-    "chain": "eth",
-    "network": "eth-mainnet",
-    "contract_address": "0xed5af388653567af2f388e6224dc7c4b3241c544"
+    "network": "pharos-testnet",
+    "chain_id": 688688,
+    "contract_address": "0x0000000000000000000000000000000000000000"
   },
   "collection": {
     "name": "Collection name",
     "symbol": "SYMBOL",
-    "token_type": "ERC721",
-    "opensea": {
-      "floor_price": 1.23
-    }
+    "token_standard": "ERC721",
+    "total_supply": 10000,
+    "contract_uri": "ipfs://..."
   },
   "appraisal": {
     "summary": "Source-grounded, non-financial appraisal.",
@@ -130,22 +119,17 @@ Example shape:
 
 Common errors:
 
-- `MISSING_API_KEY`
 - `MISSING_CONTRACT_ADDRESS`
-- `NEEDS_CHAIN`
 - `INVALID_CONTRACT_ADDRESS`
-- `UNSUPPORTED_CHAIN`
-- `ALCHEMY_AUTH_FAILED`
-- `PROVIDER_ERROR`
-- `NOT_FOUND`
+- `UNSUPPORTED_NETWORK`
+- `NOT_CONTRACT`
+- `RPC_ERROR`
 
-If a prompt contains an address but no chain, the skill returns `NEEDS_CHAIN` instead of guessing.
+Unsupported network names are rejected. Address-only prompts default to Pharos testnet.
 
 ## Safety Notes
 
-This skill does not provide buy, sell, hold, price-target, profit, or investment advice. It does not invent sales, volume, ownership, rarity, or floor data. Appraisal claims are limited to metadata returned by Alchemy.
-
-Unsupported chains are rejected. API keys are never included in output.
+This skill does not provide buy, sell, hold, price-target, profit, or investment advice. It does not invent sales, volume, ownership, rarity, floor price, or liquidity data. Appraisal claims are limited to Pharos contract reads.
 
 ## Skill Files
 
@@ -154,3 +138,4 @@ Unsupported chains are rejected. API keys are never included in output.
 - `scripts/run_appraisal.py` - CLI wrapper
 - `references/io-schema.md` - detailed input/output schema
 - `examples/nft-appraisal-input.json` - sample request
+
