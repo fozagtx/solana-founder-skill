@@ -6,7 +6,7 @@
 {
   "prompt": "Appraise this Pharos NFT contract: 0x0000000000000000000000000000000000000000",
   "contract_address": "0x0000000000000000000000000000000000000000",
-  "network": "pharos-testnet",
+  "network": "pharos",
   "rpc_url": "optional custom Pharos RPC URL",
   "openai_api_key": "optional",
   "timeout_seconds": 20
@@ -16,11 +16,10 @@
 Supported networks:
 
 - `pharos`
-- `pharos-testnet`
 - `pharos-atlantic`
 - `pharos-mainnet`
 
-Default network: `pharos-testnet`.
+Default network: live Pharos mainnet RPC.
 
 ## Output
 
@@ -31,11 +30,11 @@ Default network: `pharos-testnet`.
   "skill": "nft_appraisal_skill",
   "source": "pharos-json-rpc",
   "target": {
-    "network": "pharos-testnet",
-    "chain_id": 688688,
+    "network": "pharos-mainnet",
+    "chain_id": 1672,
     "contract_address": "0x...",
-    "rpc_url": "https://testnet.dplabs-internal.com",
-    "explorer_url": "https://testnet.pharosscan.xyz"
+    "rpc_url": "https://rpc.pharos.xyz/",
+    "explorer_url": null
   },
   "collection": {
     "address": "0x...",
@@ -75,4 +74,3 @@ Default network: `pharos-testnet`.
 - `RPC_ERROR`
 - `UNSAFE_INPUT`
 - `UNEXPECTED_ERROR`
-

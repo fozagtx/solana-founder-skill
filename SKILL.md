@@ -32,7 +32,7 @@ printf '%s\n' '{"prompt":"appraise this Pharos NFT contract: 0x00000000000000000
 ```json
 {
   "prompt": "appraise this Pharos NFT contract: 0x0000000000000000000000000000000000000000",
-  "network": "pharos-testnet",
+  "network": "pharos",
   "rpc_url": "optional custom Pharos RPC URL",
   "openai_api_key": "optional, prefer OPENAI_API_KEY"
 }
@@ -43,7 +43,7 @@ You can also bypass extraction:
 ```json
 {
   "contract_address": "0x0000000000000000000000000000000000000000",
-  "network": "pharos-testnet"
+  "network": "pharos"
 }
 ```
 
@@ -58,4 +58,3 @@ Returns extracted target, Pharos RPC network details, contract bytecode presence
 - No invented floor price, volume, rarity, ownership, or sales data.
 - Do not claim market value unless a Pharos marketplace data source is explicitly added later.
 - API keys and RPC secrets must not be logged or returned.
-

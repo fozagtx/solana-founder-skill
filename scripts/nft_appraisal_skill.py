@@ -17,16 +17,10 @@ UNSAFE_KEYS = {"headers", "cookies", "proxy", "proxies", "private_key", "seed_ph
 
 PHAROS_NETWORKS = {
     "pharos": {
-        "network": "pharos-testnet",
-        "rpc_url": "https://testnet.dplabs-internal.com",
-        "chain_id": 688688,
-        "explorer_url": "https://testnet.pharosscan.xyz",
-    },
-    "pharos-testnet": {
-        "network": "pharos-testnet",
-        "rpc_url": "https://testnet.dplabs-internal.com",
-        "chain_id": 688688,
-        "explorer_url": "https://testnet.pharosscan.xyz",
+        "network": "pharos-mainnet",
+        "rpc_url": "https://rpc.pharos.xyz/",
+        "chain_id": 1672,
+        "explorer_url": None,
     },
     "pharos-atlantic": {
         "network": "pharos-atlantic",
@@ -37,16 +31,13 @@ PHAROS_NETWORKS = {
     "pharos-mainnet": {
         "network": "pharos-mainnet",
         "rpc_url": "https://rpc.pharos.xyz/",
-        "chain_id": None,
+        "chain_id": 1672,
         "explorer_url": None,
     },
 }
 
 NETWORK_ALIASES = {
-    "pharos": "pharos-testnet",
-    "testnet": "pharos-testnet",
-    "pharos testnet": "pharos-testnet",
-    "pharos-testnet": "pharos-testnet",
+    "pharos": "pharos-mainnet",
     "atlantic": "pharos-atlantic",
     "pharos atlantic": "pharos-atlantic",
     "pharos-atlantic": "pharos-atlantic",
@@ -161,7 +152,7 @@ def _reject_unsafe(metadata: Mapping[str, Any]) -> None:
 
 def _extract_target(metadata: Mapping[str, Any]) -> Tuple[Dict[str, str], Dict[str, Any]]:
     direct_address = str(metadata.get("contract_address") or "").strip()
-    direct_network = str(metadata.get("network") or metadata.get("chain") or "pharos-testnet").strip()
+    direct_network = str(metadata.get("network") or metadata.get("chain") or "pharos").strip()
     if direct_address:
         return {
             "contract_address": _validate_address(direct_address),
@@ -179,7 +170,7 @@ def _extract_target(metadata: Mapping[str, Any]) -> Tuple[Dict[str, str], Dict[s
             try:
                 return {
                     "contract_address": _validate_address(str(extracted.get("contract_address") or "")),
-                    "network": _normalize_network(str(extracted.get("network") or direct_network)),
+                "network": _normalize_network(str(extracted.get("network") or direct_network)),
                 }, {"method": "openai", "warnings": []}
             except SkillError:
                 pass
@@ -189,8 +180,8 @@ def _extract_target(metadata: Mapping[str, Any]) -> Tuple[Dict[str, str], Dict[s
         raise SkillError("MISSING_CONTRACT_ADDRESS", "Could not find an NFT contract address in the prompt.")
     return {
         "contract_address": _validate_address(address_match.group(0)),
-        "network": _detect_network(prompt) or "pharos-testnet",
-    }, {"method": "regex", "warnings": ["Used regex fallback. Defaulted to Pharos testnet when no Pharos network was named."]}
+        "network": _detect_network(prompt) or "pharos-mainnet",
+    }, {"method": "regex", "warnings": ["Used regex fallback. Defaulted to Pharos mainnet when no Pharos network was named."]}
 
 
 def _extract_with_openai(prompt: str, api_key: str) -> Optional[Dict[str, str]]:
@@ -202,7 +193,7 @@ def _extract_with_openai(prompt: str, api_key: str) -> Optional[Dict[str, str]]:
                 "role": "system",
                 "content": (
                     "Extract JSON only: {\"contract_address\": string|null, "
-                    "\"network\": \"pharos-testnet\"|\"pharos-atlantic\"|\"pharos-mainnet\"|null}. "
+                    "\"network\": \"pharos-mainnet\"|\"pharos-atlantic\"|null}. "
                     "This skill supports Pharos networks only."
                 ),
             },
@@ -235,7 +226,7 @@ def _normalize_network(network: str) -> str:
     if raw in NETWORK_ALIASES:
         return NETWORK_ALIASES[raw]
     if not raw:
-        return "pharos-testnet"
+        return "pharos-mainnet"
     raise SkillError("UNSUPPORTED_NETWORK", "This skill supports Pharos networks only.")
 
 
@@ -245,8 +236,8 @@ def _detect_network(prompt: str) -> Optional[str]:
         return "pharos-atlantic"
     if re.search(r"\bmainnet\b", lowered):
         return "pharos-mainnet"
-    if re.search(r"\b(testnet|pharos)\b", lowered):
-        return "pharos-testnet"
+    if re.search(r"\bpharos\b", lowered):
+        return "pharos-mainnet"
     named_network = re.search(r"\bon\s+([a-z][a-z0-9-]*)\b", lowered)
     if named_network:
         raise SkillError("UNSUPPORTED_NETWORK", "This skill supports Pharos networks only.")

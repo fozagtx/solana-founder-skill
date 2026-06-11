@@ -12,8 +12,8 @@ This skill is built for the Skill-to-Agent Dual Cascade Hackathon as a reusable 
 
 - Extracts an NFT contract address from natural-language prompts
 - Uses Pharos JSON-RPC, not off-network NFT APIs
-- Defaults to Pharos testnet
-- Supports Pharos testnet, Pharos Atlantic, and configurable Pharos RPC URLs
+- Defaults to the live Pharos RPC at `https://rpc.pharos.xyz/`
+- Supports Pharos mainnet, Pharos Atlantic, and configurable Pharos RPC URLs
 - Checks ERC721 and ERC1155 interface support through `eth_call`
 - Reads `name`, `symbol`, `totalSupply`, and `contractURI` when the contract exposes them
 - Produces risk flags, limitations, citations, and a non-financial appraisal summary
@@ -59,18 +59,17 @@ Explicit target:
 ```json
 {
   "contract_address": "0x0000000000000000000000000000000000000000",
-  "network": "pharos-testnet"
+  "network": "pharos"
 }
 ```
 
 Supported network values:
 
 - `pharos`
-- `pharos-testnet`
 - `pharos-atlantic`
 - `pharos-mainnet`
 
-If no network is supplied, the skill defaults to `pharos-testnet`.
+If no network is supplied, the skill defaults to live Pharos mainnet RPC.
 
 ## Output
 
@@ -95,8 +94,8 @@ Example shape:
   "skill": "nft_appraisal_skill",
   "source": "pharos-json-rpc",
   "target": {
-    "network": "pharos-testnet",
-    "chain_id": 688688,
+    "network": "pharos-mainnet",
+    "chain_id": 1672,
     "contract_address": "0x0000000000000000000000000000000000000000"
   },
   "collection": {
@@ -138,4 +137,3 @@ This skill does not provide buy, sell, hold, price-target, profit, or investment
 - `scripts/run_appraisal.py` - CLI wrapper
 - `references/io-schema.md` - detailed input/output schema
 - `examples/nft-appraisal-input.json` - sample request
-
