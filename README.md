@@ -31,6 +31,19 @@ Optional environment variables:
 
 No third-party Python package is required; the skill uses Python standard-library HTTP utilities.
 
+## Install as a Skill
+
+```bash
+npx skills add https://github.com/fozagtx/pharos-nft-appraisal
+```
+
+Optional runtime configuration:
+
+```bash
+export PHAROS_RPC_URL="https://rpc.pharos.xyz/"
+export OPENAI_API_KEY="optional_openai_key"
+```
+
 ## Quick Start
 
 ```bash

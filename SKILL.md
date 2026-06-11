@@ -14,6 +14,12 @@ requires:
 
 Appraise an NFT contract from a user prompt or explicit contract address. This skill is Pharos-only.
 
+## Install
+
+```bash
+npx skills add https://github.com/fozagtx/pharos-nft-appraisal
+```
+
 ## Run
 
 ```bash
