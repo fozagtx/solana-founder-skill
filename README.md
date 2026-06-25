@@ -1,153 +1,146 @@
-<p align="center">
-  <img src="assets/logo.png" alt="Pharos NFT Appraisal logo" width="180">
-</p>
+# Solana Founder Skill
 
-# Pharos NFT Appraisal
+An AI agent skill for Solana builders who need to turn a technical idea into a validated product, credible hackathon or grant submission, and a repeatable path to first users or customers.
 
-A Pharos-compatible skill for appraising NFT contracts on Pharos. It extracts a contract address from a user prompt, inspects the contract through Pharos JSON-RPC, checks common NFT interfaces, reads standard collection metadata when available, and returns a cautious appraisal.
+Most Solana skill coverage is excellent for code, infra, DeFi integrations, auditing, and protocol APIs. This skill covers the gap that usually kills technically strong projects anyway: unclear ICP, weak positioning, fake validation, vague pricing, low-signal hackathon materials, missing proof, and founder-led acquisition that never starts.
 
-This skill is built for the Skill-to-Agent Dual Cascade Hackathon as a reusable module that any agent can call.
+## What It Helps With
 
-## Features
+| Area | Outcome |
+|------|---------|
+| Founder-market fit | Convert a broad protocol, dApp, infra, wallet, game, DeFi, AI agent, or devtool idea into a precise Solana ICP and wedge |
+| Solana necessity | Pressure-test why the product needs Solana, not just a token or generic app with wallet login |
+| Validation | Design fast tests that gather behavioral evidence from builders, users, protocols, traders, creators, DAOs, validators, or teams |
+| Offer and pricing | Package pilots, SaaS tiers, open-source support, protocol integrations, audits, data APIs, grants, and paid services |
+| First users and customers | Pick one acquisition channel and write practical founder-led outreach for the Solana ecosystem |
+| Hackathons and grants | Prepare a crisp narrative, demo script, proof checklist, and reviewer-friendly submission |
+| Proof assets | Turn interviews, pilots, and deal notes into case studies, objections, win/loss analysis, and messaging shifts |
 
-- Extracts an NFT contract address from natural-language prompts
-- Uses Pharos JSON-RPC, not off-network NFT APIs
-- Defaults to the live Pharos RPC at `https://rpc.pharos.xyz/`
-- Supports Pharos mainnet, Pharos Atlantic, and configurable Pharos RPC URLs
-- Checks ERC721 and ERC1155 interface support through `eth_call`
-- Reads `name`, `symbol`, `totalSupply`, and `contractURI` when the contract exposes them
-- Produces risk flags, limitations, citations, and a non-financial appraisal summary
+## What Makes This Different
 
-## Requirements
+- It is Solana-native but not code-only. It understands users, protocols, wallets, validators, DeFi teams, games, creators, DAOs, hackathons, grants, and devtools.
+- It is evidence-first. It treats signups, likes, and compliments as weak signal unless they convert into calls, integrations, paid pilots, commits, usage, or repeat behavior.
+- It is progressive and token-efficient. `skill/SKILL.md` routes to focused files only when needed.
+- It is safe to install. The scripts only copy local Markdown skill files into a selected skills directory.
+- It complements core Solana development skills instead of replacing them. For program code, security audits, token mechanics, infra setup, legal, or compliance, it tells the agent to delegate.
 
-- Python 3.10+
-- Pharos RPC access
+## Installation
 
-Optional environment variables:
-
-- `PHAROS_RPC_URL` - override the default Pharos RPC endpoint
-- `OPENAI_API_KEY` - optional structured prompt extraction
-- `OPENAI_EXTRACT_MODEL` - optional extraction model override
-
-No third-party Python package is required; the skill uses Python standard-library HTTP utilities.
-
-## Install as a Skill
+### Recommended
 
 ```bash
-npx skills add https://github.com/fozagtx/pharos-nft-appraisal
+git clone https://github.com/fozagtx/solana-founder-skill
+cd solana-founder-skill
+./install-custom.sh
 ```
 
-Optional runtime configuration:
+The custom installer lets you choose personal or project skill locations, including `.claude/skills` and `.agents/skills`.
+
+### Standard
 
 ```bash
-export PHAROS_RPC_URL="https://rpc.pharos.xyz/"
-export OPENAI_API_KEY="optional_openai_key"
+./install.sh
+./install.sh -y
 ```
 
-## Quick Start
+Standard defaults:
+
+- Skill location: `~/.claude/skills/solana-founder`
+- Optional config copied to: `~/.claude/CLAUDE.md`
+
+## Usage Examples
+
+```text
+I built a Solana payment routing tool but I do not know who the ICP is. Pressure-test it.
+```
+
+```text
+Help me validate a wallet analytics devtool before I spend two more weeks building.
+```
+
+```text
+Turn this hackathon project into a grant-ready submission and 3-minute demo script.
+```
+
+```text
+Here are 15 lost pilot notes from protocols. Find the real loss patterns and messaging shifts.
+```
+
+```text
+I need first users for a Solana game. Pick one channel and write the outreach.
+```
+
+## Repository Structure
+
+```text
+solana-founder-skill/
+|-- .gitignore
+|-- README.md
+|-- LICENSE
+|-- CLAUDE.md
+|-- install.sh
+|-- install-custom.sh
+|-- skill/
+|   |-- SKILL.md
+|   |-- market-positioning.md
+|   |-- validation.md
+|   |-- offer-pricing.md
+|   |-- acquisition.md
+|   |-- hackathon-grants.md
+|   |-- proof-assets.md
+|   |-- objection-map.md
+|   |-- win-loss.md
+|   `-- resources.md
+|-- agents/
+|   |-- founder-strategist.md
+|   |-- gtm-operator.md
+|   |-- grant-submission-coach.md
+|   `-- proof-writer.md
+|-- commands/
+|   |-- founder-sprint.md
+|   |-- validate-demand.md
+|   |-- grant-submission.md
+|   `-- proof-assets.md
+|-- rules/
+|   `-- founder-evidence.md
+`-- tests/
+    `-- validate_structure.sh
+```
+
+## Skill Routing
+
+`skill/SKILL.md` is the entry point. It classifies the task and routes to the smallest relevant module:
+
+- `market-positioning.md` for ICP, wedge, Solana necessity, and category design
+- `validation.md` for smoke tests, pilots, interviews, usage evidence, and MSCs
+- `offer-pricing.md` for packaging and monetization
+- `acquisition.md` for first users, developer adoption, ecosystem outbound, and partnerships
+- `hackathon-grants.md` for submissions, demos, and grant narratives
+- `proof-assets.md` for case studies and proof extraction
+- `objection-map.md` for objection stacks and defusing copy
+- `win-loss.md` for pattern extraction across pilots, deals, and lost users
+- `resources.md` for source-of-truth links
+
+## Quality Bar
+
+The skill should make an agent:
+
+- Ask for missing signal instead of writing strategy from vibes
+- Refuse to invent traction, quotes, integrations, partners, revenue, or usage
+- Treat Solana as an architectural advantage only when it is actually necessary
+- Push the builder toward real-world contact within days
+- Produce outputs that can be used in a pitch, grant application, launch post, outbound campaign, or founder operating plan
+
+## Validation
+
+Run the structure validator:
 
 ```bash
-python3 scripts/run_appraisal.py --metadata examples/nft-appraisal-input.json --pretty
+./tests/validate_structure.sh
 ```
 
-Or pipe JSON through stdin:
+It checks required files, frontmatter, relative skill links, and installer syntax.
 
-```bash
-printf '%s\n' '{"prompt":"appraise this Pharos Atlantic NFT contract: 0x22614Ca3393E83DA6411A45f012239Bafc258ABD","network":"pharos-atlantic"}' \
-  | python3 scripts/run_appraisal.py --pretty
-```
+## License
 
-## Input
-
-Natural-language prompt:
-
-```json
-{
-  "prompt": "appraise this Pharos Atlantic NFT contract: 0x22614Ca3393E83DA6411A45f012239Bafc258ABD",
-  "network": "pharos-atlantic"
-}
-```
-
-Explicit target:
-
-```json
-{
-  "contract_address": "0x22614Ca3393E83DA6411A45f012239Bafc258ABD",
-  "network": "pharos-atlantic"
-}
-```
-
-Supported network values:
-
-- `pharos`
-- `pharos-atlantic`
-- `pharos-mainnet`
-
-If no network is supplied, the skill defaults to live Pharos mainnet RPC.
-
-## Output
-
-The skill returns JSON containing:
-
-- extracted `target`
-- extraction method
-- Pharos RPC network details
-- detected NFT interfaces
-- collection metadata available from contract reads
-- cautious appraisal summary
-- confidence level
-- risk flags
-- limitations
-- provider citation
-
-Example shape:
-
-```json
-{
-  "status": "success",
-  "skill": "nft_appraisal_skill",
-  "source": "pharos-json-rpc",
-  "target": {
-    "network": "pharos-atlantic",
-    "chain_id": 688689,
-    "contract_address": "0x22614Ca3393E83DA6411A45f012239Bafc258ABD"
-  },
-  "collection": {
-    "name": "Pharos Atlantic Testnet Badge",
-    "symbol": "PATB",
-    "token_standard": "ERC721",
-    "total_supply": 658217,
-    "contract_uri": "ipfs://..."
-  },
-  "appraisal": {
-    "summary": "Source-grounded, non-financial appraisal.",
-    "confidence": "medium",
-    "risk_flags": [],
-    "limitations": []
-  }
-}
-```
-
-## Error Behavior
-
-Common errors:
-
-- `MISSING_CONTRACT_ADDRESS`
-- `INVALID_CONTRACT_ADDRESS`
-- `UNSUPPORTED_NETWORK`
-- `NOT_CONTRACT`
-- `RPC_ERROR`
-
-Unsupported network names are rejected. Address-only prompts default to Pharos testnet.
-
-## Safety Notes
-
-This skill does not provide buy, sell, hold, price-target, profit, or investment advice. It does not invent sales, volume, ownership, rarity, floor price, or liquidity data. Appraisal claims are limited to Pharos contract reads.
-
-## Skill Files
-
-- `SKILL.md` - Pharos skill manifest and agent instructions
-- `scripts/nft_appraisal_skill.py` - reusable `run(metadata)` implementation
-- `scripts/run_appraisal.py` - CLI wrapper
-- `references/io-schema.md` - detailed input/output schema
-- `examples/nft-appraisal-input.json` - sample request
+MIT. See [LICENSE](LICENSE).
